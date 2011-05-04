@@ -25,7 +25,8 @@ module Yettings
       klass_name = "#{klass_name}Yetting" unless klass_name=="Yetting"
       klass = Object.const_set(klass_name,Class.new)
       hash.each do |key,value|
-        klass.define_singleton_method(key){ value }
+        #klass.define_singleton_method(key){ value } ## giving undefined method `define_singleton_method' in ruby 1.8.7
+        (class << klass; self; end).instance_eval {define_method key, {value}}
       end
       klass.class_eval do
         def self.method_missing(method_id,*args)
