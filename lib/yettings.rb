@@ -26,7 +26,11 @@ module Yettings
       klass = Object.const_set(klass_name,Class.new)
       hash.each do |key,value|
         #klass.define_singleton_method(key){ value } ## giving undefined method `define_singleton_method' in ruby 1.8.7
-        (class << klass; self; end).instance_eval {define_method key, {value}}
+        (class << klass; self; end).instance_eval do 
+         define_method key do
+           value
+         end
+        end
       end
       klass.class_eval do
         def self.method_missing(method_id,*args)
